@@ -1,6 +1,7 @@
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
-const uri = "mongodb+srv://abdallasafwat29:1325@cluster0.tnu0ygj.mongodb.net/pharmacy?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI;
 let client = null;
 let clientPromise = null;
 
@@ -16,8 +17,7 @@ module.exports = async (req, res) => {
     const collection = db.collection("products");
     const products = await collection.find({}).toArray();
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).send(JSON.stringify(products, null, 2));
+    res.status(200).json(products);
   } catch (err) {
     console.error("API Error:", err);
     res.status(500).json({ error: err.message });
